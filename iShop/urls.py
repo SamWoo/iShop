@@ -39,6 +39,13 @@ urlpatterns = [
     # 富文本编辑器url
     path(r'ueditor/', include('DjangoUeditor.urls')),
     url(r'^', include(router.urls)),
+    # drf文档urls
+    path('docs', include_docs_urls(title='iShop')),
+    path('api-auth/', include('rest_framework.urls')),
+    # path('api-token-auth/', views.obtain_auth_token),
+    # use jwt token
+    # path('jwt-auth/',views.obtain_jwt_token),
+    path('login/',views.obtain_jwt_token),
     # 文件
     path('media/<path:path>', serve, {'document_root': MEDIA_ROOT}),
 ]

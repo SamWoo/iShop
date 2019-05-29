@@ -8,7 +8,7 @@ from datetime import datetime
 User = get_user_model()
 
 
-class ShopCart(models.Model):
+class ShoppingCart(models.Model):
     """
     购物车
     """

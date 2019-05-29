@@ -11,9 +11,13 @@ from goods.serializers import GoodsSerializer, CategorySerializer, HotSearchSeri
 
 # 自定义分页功能
 class GoodsPagination(PageNumberPagination):
+    #默认每页显示的个数
     page_size = 12
+    #页码参数,与起前端一致"page"
     page_query_param = 'page'
+    #可以动态改变每页显示的个数
     page_size_query_param = 'page_size'
+    #最多能显示多少页
     max_page_size = 100
 
 

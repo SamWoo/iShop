@@ -28,7 +28,7 @@ class GoodsAdmin(object):
         extra = 1
         style = 'tab'
 
-    inlines = [GoodsImagesInline]
+    inlines = [GoodsImagesInline,]
 
 
 class GoodsCategoryAdmin(object):
