@@ -60,7 +60,7 @@ class UserLeavingMessag(models.Model):
 
     user = models.ForeignKey(User, verbose_name='用户', on_delete=models.CASCADE)
     message_type = models.IntegerField(verbose_name='留言类型',
-                                       choices=MESSAGE_CHOICES,
+                                       choices=MESSAGE_TYPES,
                                        default=1)
     subject = models.CharField(verbose_name='主题', max_length=100, default='')
     message = models.TextField(verbose_name='留言内容',
@@ -69,7 +69,7 @@ class UserLeavingMessag(models.Model):
     file = models.FileField(verbose_name='上传的文件',
                             upload_to='message/images/',
                             help_text='上传的文件')
-    add_time = models.DateTimeField(verbose_name='添加时间', dafault=datetime.now)
+    add_time = models.DateTimeField(verbose_name='添加时间', default=datetime.now)
 
     class Meta:
         verbose_name = '用户留言'

@@ -22,5 +22,5 @@ class OrderInfoAdmin(object):
         OrderGoodsInline,
     ]
 
-    xadmin.site.register(ShoppingCart, ShoppingCartAdmin)
-    xadmin.site.register(OrderInfo, OrderInfoAdmin)
+xadmin.site.register(ShoppingCart, ShoppingCartAdmin)
+xadmin.site.register(OrderInfo, OrderInfoAdmin)

@@ -54,11 +54,11 @@ class OrderInfo(models.Model):
                                 null=True,
                                 blank=True)
     pay_status = models.CharField(verbose_name='订单状态',
-                                  choice=ORDER_STATUS,
+                                  choices=ORDER_STATUS,
                                   default='paying',
                                   max_length=30)
     pay_type = models.CharField(verbose_name='支付类型',
-                                choice=PAY_TYPE,
+                                choices=PAY_TYPE,
                                 default='alipay',
                                 max_length=10)
     post_script = models.TextField(verbose_name='订单留言', max_length=200)

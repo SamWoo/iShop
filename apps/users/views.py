@@ -7,7 +7,7 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework.response import Response
 from rest_framework import status
 from users.models import VerifyCode
-from users.serializers import SmsSerializer
+from users.serializers import SmsSerializer,UserRegisterSerializer
 from random import choice
 
 User = get_user_model()
@@ -46,9 +46,9 @@ class SmsCodeViewSet(CreateModelMixin, GenericViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         # 验证合法性
-        serializer.is_validate(raise_exception=True)
-
-        mobile = serializer.validate_data['mobile']
+        serializer.is_valid(raise_exception=True)
+        
+        mobile = serializer.validated_data['mobile']
         yun_pian = YunPian(APIKEY)
         #生成验证码
         code = self.generate_code()
@@ -66,3 +66,9 @@ class SmsCodeViewSet(CreateModelMixin, GenericViewSet):
                 'mobile': mobile,
             },
                             status=status.HTTP_201_CREATED)
+
+class UserViewSet(CreateModelMixin,GenericViewSet):
+    """
+    用户注册
+    """
+    serializer_class=UserRegisterSerializer

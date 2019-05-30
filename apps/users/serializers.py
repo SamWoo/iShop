@@ -1,15 +1,17 @@
 from rest_framework import serializers
+from rest_framework.validators import UniqueValidator
 import re
 from iShop.settings import REGEX_MOBILE
 from django.contrib.auth import get_user_model
 from datetime import datetime, timedelta
+from users.models import VerifyCode
 
 User = get_user_model()
 
 
-class SmsSerializer(serializers.ModelSerializer):
+class SmsSerializer(serializers.Serializer):
     """
-    手机号序列化
+    验证手机号码
     """
     mobile = serializers.CharField(max_length=11)
 
@@ -28,11 +30,65 @@ class SmsSerializer(serializers.ModelSerializer):
 
         # 验证码发送频率
         # 60s内只能发送一次
-        one_minutes_ago = datetime.now() - timedelta(
-            hour=0, minutes=1, second=0)
-        if VerifyCode.objects.filter(add_time__gt=one_minutes_ago,
+        one_minute_ago = datetime.now() - timedelta(
+            hours=0, minutes=1, seconds=0)
+        if VerifyCode.objects.filter(add_time__gt=one_minute_ago,
                                      mobile=mobile):
             raise serializers.ValidationError('距上次发送验证码未超过60s')
         return mobile
 
 
+class UserRegisterSerializer(serializers.ModelSerializer):
+    """
+    用户注册
+    """
+    code = serializers.CharField(max_length=4,
+                                 write_only=True,
+                                 required=True,
+                                 error_messages={
+                                     'blank': '请输入验证码',
+                                     'required': '请输入验证码',
+                                     'max_length': '验证码格式错误',
+                                     'min_length': '验证码格式错误',
+                                 },
+                                 help_text='验证码')
+    username = serializers.CharField(help_text='用户名',
+                                     required=True,
+                                     allow_blank=False,
+                                     validators=[
+                                         UniqueValidator(
+                                             queryset=User.objects.all(),
+                                             message='用户已经存在')
+                                     ])
+
+    def validate_code(self, code):
+        # 用户注册，已post方式提交注册信息，post的数据都保存在initial_data里面
+        #username就是用户注册的手机号，验证码按添加时间倒序排序，为了后面验证过期，错误等
+        verify_records = VerifyCode.objects.filter(
+            mobile=self.initial_data['username']).order_by('-add_time')
+
+        if verify_records:
+            # 同一个号码最近的一个验证码
+            last_code = verify_records[0]
+            # 有效期为五分钟
+            five_minutes_ago = datetime.now - timedelta(
+                hours=0, minutes=5, seconds=0)
+            if five_minutes_ago > last_code.add_time:
+                raise serializers.ValidationError('验证码已过期')
+
+            if last_code != code:
+                raise serializers.ValidationError('验证码错误')
+        else:
+            raise serializers.ValidationError('验证码错误 ')
+
+    # 所有字段。attrs是字段验证合法之后返回的总的dict
+    def validate(self, attrs):
+        #前端没有传mobile值到后端，这里添加进来
+        attrs['mobile'] = attrs['username']
+        #code是自己添加得，数据库中并没有这个字段，验证完就删除掉
+        del attr['code']
+        return attrs
+
+    class Meta:
+        model = User
+        fields = ['username', 'code', 'mobile']
