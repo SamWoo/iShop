@@ -47,14 +47,16 @@ class GoodsImagesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = GoodsImage
-        fields = ('image',)
+        fields = ('image', )
 
 
 class GoodsSerializer(serializers.ModelSerializer):
     """
     商品列表页
     """
+    # 覆盖外键字段
     category = CategorySerializer()
+    # images是数据库中设置的related_name="images"，把轮播图嵌套进来
     images = GoodsImagesSerializer(many=True)
 
     class Meta:

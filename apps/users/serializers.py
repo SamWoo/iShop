@@ -42,6 +42,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     """
     用户注册
     """
+    # UserProfile中没有code字段，这里需要自定义一个code序列化字段
     code = serializers.CharField(max_length=4,
                                  write_only=True,
                                  required=True,
@@ -52,6 +53,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
                                      'min_length': '验证码格式错误',
                                  },
                                  help_text='验证码')
+    # 验证用户名是否存在
     username = serializers.CharField(help_text='用户名',
                                      required=True,
                                      allow_blank=False,
@@ -60,6 +62,13 @@ class UserRegisterSerializer(serializers.ModelSerializer):
                                              queryset=User.objects.all(),
                                              message='用户已经存在')
                                      ])
+    # 密码
+    password = serializers.CharField(help_text='密码',
+                                     style={
+                                         'input': 'password',
+                                     },
+                                     label='密码',
+                                     write_only=True)
 
     def validate_code(self, code):
         # 用户注册，已post方式提交注册信息，post的数据都保存在initial_data里面
@@ -89,6 +98,23 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         del attr['code']
         return attrs
 
+    # 保存密码
+    # def create(self, validated_data):
+    #     user = super(UserRegisterSerializer,
+    #                  self).create(validated_data=validated_data)
+    #     user.set_password(validated_data['password'])
+    #     pass
+
     class Meta:
         model = User
-        fields = ['username', 'code', 'mobile']
+        fields = ['username', 'code', 'mobile', 'password']
+
+
+class UserDetailSerializer(serializers.ModelSerializer):
+    """
+    用户详情
+    """
+
+    class Meta:
+        model = User
+        fields = ["name", "gender", "birthday", "email", "mobile"]

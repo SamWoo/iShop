@@ -40,17 +40,23 @@ class GoodsPagination(PageNumberPagination):
 #     # 分页
 #     pagination_class = GoodsPagination
 
+
 # use viewsets & mixin
-class GoodsListViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+class GoodsListViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
+                       viewsets.GenericViewSet):
     """
-    商品列表页, 分页， 搜索， 过滤， 排序
+    list:
+        商品列表，分页，搜索，过滤，排序
+    retrieve:
+        获取商品详情
     """
     queryset = Goods.objects.all()
     serializer_class = GoodsSerializer
     # 分页
     pagination_class = GoodsPagination
     # 过滤
-    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter,
+                       filters.OrderingFilter)
     # 设置filter的类为我们自定义的类
     filter_class = GoodsFilter
     # 搜索功能
@@ -59,7 +65,8 @@ class GoodsListViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     ordering_fields = ('sold_num', 'shop_price')
 
 
-class CategoryViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class CategoryViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
+                      viewsets.GenericViewSet):
     """
     list:
         商品分类列表数据
@@ -72,7 +79,8 @@ class CategoryViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets
 
 class HotSearchViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     """
-    获取热搜词列表
+    list:
+        热搜词列表
     """
     queryset = HotSearchWords.objects.all().order_by('-index')
     serializer_class = HotSearchSerializer
@@ -80,7 +88,8 @@ class HotSearchViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
 
 class BannerViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     """
-    获取轮播图列表
+    list:
+        商品轮播图列表
     """
     queryset = Banner.objects.all().order_by('index')
     serializer_class = BannerSerializer
@@ -88,7 +97,9 @@ class BannerViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
 
 class IndexCategoryViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     """
-    首页商品分类数据
+    list:
+        首页商品分类数据
     """
-    queryset = GoodsCategory.objects.filter(is_tab=True, name__in=['生鲜食品', '酒水饮料'])
+    queryset = GoodsCategory.objects.filter(is_tab=True,
+                                            name__in=['生鲜食品', '酒水饮料'])
     # serializer_class = In

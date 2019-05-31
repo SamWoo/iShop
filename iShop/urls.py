@@ -24,6 +24,7 @@ from rest_framework_jwt.views import obtain_jwt_token
 import xadmin
 from goods.views import GoodsListViewSet, CategoryViewSet, BannerViewSet, HotSearchViewSet
 from users.views import SmsCodeViewSet, UserViewSet
+from user_operation.views import UserFavViewSet 
 from iShop.settings import MEDIA_ROOT
 
 router = DefaultRouter()
@@ -39,6 +40,8 @@ router.register(r'hotsearchs', HotSearchViewSet, base_name='hotsearchs')
 router.register(r'codes', SmsCodeViewSet, base_name='codes')
 # 配置users register的url
 router.register(r'users', UserViewSet, base_name='users')
+# 配置user fav的url
+router.register(r'favs',UserFavViewSet,base_name='favs')
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
