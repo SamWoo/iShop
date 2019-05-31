@@ -52,7 +52,7 @@ class UserAddress(models.Model):
         return self.address
 
 
-class UserLeavingMessag(models.Model):
+class UserLeavingMessage(models.Model):
     """
     用户留言
     """

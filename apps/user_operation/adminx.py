@@ -1,5 +1,5 @@
 import xadmin
-from user_operation.models import UserFav, UserLeavingMessag, UserAddress
+from user_operation.models import UserFav, UserLeavingMessage, UserAddress
 
 
 class UserFavAdmin(object):
@@ -15,5 +15,5 @@ class UserLeavingMessageAdmin(object):
 
 
 xadmin.site.register(UserFav, UserFavAdmin)
-xadmin.site.register(UserLeavingMessag, UserLeavingMessageAdmin)
+xadmin.site.register(UserLeavingMessage, UserLeavingMessageAdmin)
 xadmin.site.register(UserAddress, UserAddressAdmin)

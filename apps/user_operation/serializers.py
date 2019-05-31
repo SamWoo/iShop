@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
-from user_operation.models import UserFav, UserAddress, UserLeavingMessag
+from user_operation.models import UserFav, UserAddress, UserLeavingMessage
 from goods.serializers import GoodsSerializer
 
 class UserFavDetailSerializer(serializers.ModelSerializer):
@@ -27,3 +27,27 @@ class UserFavSerializer(serializers.ModelSerializer):
         model = UserFav
         # 收藏的时候需要返回商品的id，因为取消收藏的时候必须知道商品的id是多少
         fields = ['user', 'goods', 'id']
+
+class UserAddressSerializer(serializers.ModelSerializer):
+    """
+    收货地址
+    """
+    # 获取当前登录的用户
+    user=serializers.HiddenField(default=serializers.CurrentUserDefault())
+    add_time = serializers.DateTimeField(read_only=True,
+                                         format='%Y-%m-%d %H:%M')
+
+    class Meta:
+        model=UserAddress
+        fields='__all__'
+
+class UserLeavingMessageSerializer(serializers.ModelSerializer):
+    """
+    用户留言
+    """
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    add_time = serializers.DateTimeField(read_only=True,
+                                         format='%Y-%m-%d %H:%M')
+    class Meta:
+        model=UserLeavingMessage
+        fields='__all__'
