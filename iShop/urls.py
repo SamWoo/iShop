@@ -24,26 +24,33 @@ from rest_framework_jwt.views import obtain_jwt_token
 import xadmin
 from goods.views import GoodsListViewSet, CategoryViewSet, BannerViewSet, HotSearchViewSet
 from users.views import SmsCodeViewSet, UserViewSet
-from user_operation.views import UserFavViewSet, UserAddressViewSet
+from user_operation.views import UserFavViewSet, UserAddressViewSet, UserLeavingMessageViewSet
+from trade.views import ShoppingCartViewSet,OrderViewSet
 from iShop.settings import MEDIA_ROOT
 
 router = DefaultRouter()
-# 配置goods的url
+# Goods
 router.register(r'goods', GoodsListViewSet, base_name='goods')
-# 配置category的url
+# Category
 router.register(r'categories', CategoryViewSet, base_name='categories')
-# 配置banner的url
+# Banner
 router.register(r'banners', BannerViewSet, base_name='banners')
-# 配置hotsearch的url
+# Hot Search Words
 router.register(r'hotsearchs', HotSearchViewSet, base_name='hotsearchs')
-# 配置verify code的url
+# SMS Verfiy Code
 router.register(r'codes', SmsCodeViewSet, base_name='codes')
-# 配置users register的url
+# User Register
 router.register(r'users', UserViewSet, base_name='users')
-# 配置user fav的url
-router.register(r'favs',UserFavViewSet,base_name='favs')
-# 配置 user address的url
-router.register(r'addresses',UserAddressViewSet,base_name='addresses')
+# User Favs
+router.register(r'favs', UserFavViewSet, base_name='favs')
+# User Address
+router.register(r'addresses', UserAddressViewSet, base_name='addresses')
+# User LeavingMessages
+router.register(r'messages', UserLeavingMessageViewSet, base_name='messages')
+# ShoppingCart
+router.register(r'shopcarts', ShoppingCartViewSet, base_name='shopcarts')
+# Orders
+router.register(r'orders', OrderViewSet, base_name='orders')
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -55,10 +62,10 @@ urlpatterns = [
     # drf文档urls
     url('docs', include_docs_urls(title='iShop')),
     url('api-auth/', include('rest_framework.urls')),
-    # django自带的auth-token认证
+    # drf自带的auth-token认证
     url('api-token-auth/', views.obtain_auth_token),
-    # use jwt token
-    # path('jwt-auth/',views.obtain_jwt_token),
+    # #jwt的认证接口
+    # path('jwt-auth/', views.obtain_jwt_token),
     url('login/', obtain_jwt_token),
     # 文件
     path('media/<path:path>', serve, {'document_root': MEDIA_ROOT}),

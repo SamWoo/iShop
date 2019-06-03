@@ -154,6 +154,7 @@ USE_TZ = False
 # 这个文件夹在生产环境才起效
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static').replace('\\', '/')
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static').replace('\\', '/'), )
 
 # 媒体文件ROOT
 MEDIA_URL = '/media/'
@@ -161,10 +162,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # rest_framework分页功能
 REST_FRAMEWORK = {
-#     # 分页
-#     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-#     # 每页显示的个数
-#     'PAGE_SIZE': 10,
+    #     # 分页
+    #     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    #     # 每页显示的个数
+    #     'PAGE_SIZE': 10,
 
     # request.auth认证
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -179,14 +180,12 @@ REST_FRAMEWORK = {
 CORS_ORIGIN_ALLOW_ALL = True
 
 #  自定义用户认证
-AUTHENTICATION_BACKENDS =(
-    'users.views.CustomBackend',
-)
+AUTHENTICATION_BACKENDS = ('users.views.CustomBackend', )
 
 # JWT有效时间设置
-JWT_AUTH={
-    'JWT_EXPIRATION_DELTA':datetime.timedelta(days=7),
-    'JWT_AUTH_HEADER_PREFIX':'JWT',
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
+    'JWT_AUTH_HEADER_PREFIX': 'JWT',
 }
 
 # 手机号码正则表达式
@@ -194,4 +193,3 @@ REGEX_MOBILE = "^1[358]\d{9}$|^147\d{8}$|^176\d{8}$"
 
 #云片网APIKEY
 APIKEY = "xxxxx327d4be01608xxxxxxxxxx"
-

@@ -31,7 +31,7 @@ class CustomBackend(ModelBackend):
             user = User.objects.get(Q(username=username) | Q(mobile=username))
             if user.check_password(password=password):
                 return user
-        except expression as identifier:
+        except Exception as e:
             return None
 
 

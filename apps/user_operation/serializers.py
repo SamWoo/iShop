@@ -14,11 +14,11 @@ class UserFavSerializer(serializers.ModelSerializer):
     """
     用户收藏
     """
-    #获取当前登录的用户
+    # 获取当前登录的用户
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
-        #validate实现唯一联合，一个商品只能收藏一次
+        # validate实现唯一联合，一个商品只能收藏一次
         validtors = [
             UniqueTogetherValidator(queryset=UserFav.objects.all(),
                                     fields=('user', 'goods'),
