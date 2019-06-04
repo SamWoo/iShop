@@ -103,7 +103,6 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     #     user = super(UserRegisterSerializer,
     #                  self).create(validated_data=validated_data)
     #     user.set_password(validated_data['password'])
-    #     pass
 
     class Meta:
         model = User

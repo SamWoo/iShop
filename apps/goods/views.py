@@ -6,7 +6,9 @@ from rest_framework.pagination import PageNumberPagination
 # Create your views here.
 from goods.filters import GoodsFilter
 from goods.models import Goods, GoodsCategory, HotSearchWords, Banner
-from goods.serializers import GoodsSerializer, CategorySerializer, HotSearchSerializer, BannerSerializer
+from goods.serializers import GoodsSerializer, CategorySerializer, HotSearchSerializer, BannerSerializer, IndexCategorySerializer
+from rest_framework_extensions.cache.mixins import CacheResponseMixin
+from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
 
 
 # 自定义分页功能
@@ -42,8 +44,9 @@ class GoodsPagination(PageNumberPagination):
 
 
 # use viewsets & mixin
-class GoodsListViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
-                       viewsets.GenericViewSet):
+# CacheResponseMixin一定要放在第一个位置
+class GoodsListViewSet(mixins.ListModelMixin,
+                       mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     """
     list:
         商品列表，分页，搜索，过滤，排序
@@ -54,6 +57,9 @@ class GoodsListViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
     serializer_class = GoodsSerializer
     # 分页
     pagination_class = GoodsPagination
+    # 限速，防爬虫
+    throttle_classes = (UserRateThrottle, AnonRateThrottle)
+
     # 过滤
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,
                        filters.OrderingFilter)
@@ -63,6 +69,14 @@ class GoodsListViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
     search_fields = ('name', 'goods_brief', 'goods_desc')
     # 排序功能
     ordering_fields = ('sold_num', 'shop_price')
+
+    # 商品点击数 + 1
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.click_num += 1
+        instance.save()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
 
 
 class CategoryViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
@@ -102,4 +116,4 @@ class IndexCategoryViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     """
     queryset = GoodsCategory.objects.filter(is_tab=True,
                                             name__in=['生鲜食品', '酒水饮料'])
-    # serializer_class = In
+    serializer_class = IndexCategorySerializer

@@ -5,10 +5,10 @@ from django.db.models import Q
 from rest_framework import mixins
 from rest_framework import viewsets
 from rest_framework_jwt.serializers import jwt_encode_handler, jwt_payload_handler
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import permissions
 from utils.permissions import IsOwnerOrReadOnly
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
-from rest_framework.authentication import SessionAuthentication
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.response import Response
 from rest_framework import status
 from users.models import VerifyCode
@@ -18,21 +18,20 @@ from utils.yunpian import YunPian
 
 User = get_user_model()
 
-
 # Create your views here.
-class CustomBackend(ModelBackend):
-    """
-    自定义用户认证
-    """
+# class CustomBackend(ModelBackend):
+#     """
+#     自定义用户认证
+#     """
 
-    def authenticate(self, username=None, password=None, **kwargs):
-        #用户名和手机都能登录
-        try:
-            user = User.objects.get(Q(username=username) | Q(mobile=username))
-            if user.check_password(password=password):
-                return user
-        except Exception as e:
-            return None
+#     def authenticate(self, username=None, password=None, **kwargs):
+#         #用户名和手机都能登录
+#         try:
+#             user = User.objects.get(Q(username=username) | Q(mobile=username))
+#             if user.check_password(password=password):
+#                 return user
+#         except Exception as e:
+#             return None
 
 
 class SmsCodeViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
@@ -85,8 +84,10 @@ class UserViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin,
     update:
         更新用户信息
     """
-    # serializer_class = UserRegisterSerializer
+    serializer_class = UserRegisterSerializer
     queryset = User.objects.all()
+    # authentication_classes = (TokenAuthentication, )
+
     authentication_classes = (JSONWebTokenAuthentication,
                               SessionAuthentication)
 
@@ -110,7 +111,7 @@ class UserViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin,
     #2.当想获取用户详情信息的时候，必须登录才行
     def get_permissions(self):
         if self.action == 'retrieve':
-            return [IsAuthenticated()]
+            return [permissions.IsAuthenticated()]
         elif self.action == 'create':
             return []
         return []

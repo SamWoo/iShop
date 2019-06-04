@@ -49,12 +49,13 @@ INSTALLED_APPS = [
     'crispy_forms',
     'rest_framework',
     'django_filters',
-    'goods',
-    'trade',
-    'user_operation',
+    'goods.apps.GoodsConfig',
+    'trade.apps.TradeConfig',
+    'user_operation.apps.UserOperationConfig',
     'DjangoUeditor',
     'coreschema',
     'rest_framework.authtoken',
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -81,6 +82,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # 第三方登录
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -154,7 +158,7 @@ USE_TZ = False
 # 这个文件夹在生产环境才起效
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static').replace('\\', '/')
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static').replace('\\', '/'), )
+# STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static').replace('\\', '/'), )
 
 # 媒体文件ROOT
 MEDIA_URL = '/media/'
@@ -171,16 +175,31 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework.authentication.TokenAuthentication',
         # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-    )
+    ),
+    # 限速设置
+    'DEFAULT_THROTTLE_CLASSES': (
+        'rest_framework.throttling.AnonRateThrottle',  # 未登陆用户
+        'rest_framework.throttling.UserRateThrottle'  # 登陆用户
+    ),
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '3/minute',  # 每分钟可以请求两次s
+        'user': '5/minute'  # 每分钟可以请求五次
+    }
 }
 
 #  跨域配置
 CORS_ORIGIN_ALLOW_ALL = True
 
 #  自定义用户认证
-AUTHENTICATION_BACKENDS = ('users.views.CustomBackend', )
+AUTHENTICATION_BACKENDS = (
+    # 'users.views.CustomBackend',
+    'social_core.backends.weibo.WeiboOAuth2',
+    'social_core.backends.qq.QQOAuth2',
+    'social_core.backends.weixin.WeixinOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 # JWT有效时间设置
 JWT_AUTH = {
@@ -193,3 +212,32 @@ REGEX_MOBILE = "^1[358]\d{9}$|^147\d{8}$|^176\d{8}$"
 
 #云片网APIKEY
 APIKEY = "xxxxx327d4be01608xxxxxxxxxx"
+
+# 缓存配置,这个缓存使用的是内存，每次重启之后就会失效
+REST_FRAMEWORK_EXTENSIONS = {
+    'DEFAULT_CACHE_RESPONSE_TIMEOUT': 10 * 60,  # 10 minutes过期，时间可以随便设置
+}
+
+# Cache配置
+# CACHES = {
+    # 'default': {
+        # 'BACKEND': 'django_redis.cache.RedisCache',
+        # 'LOCATION': 'redis://127.0.0.1:8000',
+        # 'OPTIONS': {
+        #     'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        # }
+    # }
+# }
+
+# 第三方登录，里面的值是你的开放平台对应的值
+SOCIAL_AUTH_WEIBO_KEY = 'xxxxxxx'
+SOCIAL_AUTH_WEIBO_SECRET = 'xxxxxx'
+
+SOCIAL_AUTH_QQ_KEY = 'xxxxxxx'
+SOCIAL_AUTH_QQ_SECRET = 'xxxxxxx'
+
+SOCIAL_AUTH_WEIXIN_KEY = 'xxxxxxx'
+SOCIAL_AUTH_WEIXIN_SECRET = 'xxxxxxx'
+
+#登录成功后跳转到首页
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/index/'
