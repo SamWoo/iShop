@@ -43,7 +43,8 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     用户注册
     """
     # UserProfile中没有code字段，这里需要自定义一个code序列化字段
-    code = serializers.CharField(max_length=4,
+    code = serializers.CharField(label='验证码',
+                                 max_length=4,
                                  write_only=True,
                                  required=True,
                                  error_messages={
@@ -54,7 +55,8 @@ class UserRegisterSerializer(serializers.ModelSerializer):
                                  },
                                  help_text='验证码')
     # 验证用户名是否存在
-    username = serializers.CharField(help_text='用户名',
+    username = serializers.CharField(label='用户名',
+                                     help_text='用户名',
                                      required=True,
                                      allow_blank=False,
                                      validators=[
@@ -75,27 +77,29 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         #username就是用户注册的手机号，验证码按添加时间倒序排序，为了后面验证过期，错误等
         verify_records = VerifyCode.objects.filter(
             mobile=self.initial_data['username']).order_by('-add_time')
+        # print(verify_records)
 
         if verify_records:
             # 同一个号码最近的一个验证码
             last_code = verify_records[0]
+            print(last_code,code)
             # 有效期为五分钟
-            five_minutes_ago = datetime.now - timedelta(
+            five_minutes_ago = datetime.now() - timedelta(
                 hours=0, minutes=5, seconds=0)
             if five_minutes_ago > last_code.add_time:
                 raise serializers.ValidationError('验证码已过期')
 
-            if last_code != code:
+            if last_code.code != code:
                 raise serializers.ValidationError('验证码错误')
         else:
             raise serializers.ValidationError('验证码错误 ')
 
     # 所有字段。attrs是字段验证合法之后返回的总的dict
     def validate(self, attrs):
-        #前端没有传mobile值到后端，这里添加进来
+        # 前端没有传mobile值到后端，这里添加进来
         attrs['mobile'] = attrs['username']
-        #code是自己添加得，数据库中并没有这个字段，验证完就删除掉
-        del attr['code']
+        # code是自己添加得，数据库中并没有这个字段，验证完就删除掉
+        del attrs['code']
         return attrs
 
     # 保存密码

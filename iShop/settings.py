@@ -55,7 +55,7 @@ INSTALLED_APPS = [
     'DjangoUeditor',
     'coreschema',
     'rest_framework.authtoken',
-    'social_django',
+    # 'social_django',
 ]
 
 MIDDLEWARE = [
@@ -83,8 +83,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 # 第三方登录
-                'social_django.context_processors.backends',
-                'social_django.context_processors.login_redirect',
+                # 'social_django.context_processors.backends',
+                # 'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -175,18 +175,18 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        # 'rest_framework.authentication.TokenAuthentication',
-        # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     ),
     # 限速设置
-    'DEFAULT_THROTTLE_CLASSES': (
-        'rest_framework.throttling.AnonRateThrottle',  # 未登陆用户
-        'rest_framework.throttling.UserRateThrottle'  # 登陆用户
-    ),
-    'DEFAULT_THROTTLE_RATES': {
-        'anon': '3/minute',  # 每分钟可以请求两次s
-        'user': '5/minute'  # 每分钟可以请求五次
-    }
+    # 'DEFAULT_THROTTLE_CLASSES': (
+    #     'rest_framework.throttling.AnonRateThrottle',  # 未登陆用户
+    #     'rest_framework.throttling.UserRateThrottle'  # 登陆用户
+    # ),
+    # 'DEFAULT_THROTTLE_RATES': {
+    #     'anon': '3/minute',  # 每分钟可以请求两次s
+    #     'user': '5/minute'  # 每分钟可以请求五次
+    # }
 }
 
 #  跨域配置
@@ -194,7 +194,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 #  自定义用户认证
 AUTHENTICATION_BACKENDS = (
-    # 'users.views.CustomBackend',
+    'users.views.CustomBackend',
     'social_core.backends.weibo.WeiboOAuth2',
     'social_core.backends.qq.QQOAuth2',
     'social_core.backends.weixin.WeixinOAuth2',

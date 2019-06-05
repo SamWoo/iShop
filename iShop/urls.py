@@ -63,12 +63,11 @@ urlpatterns = [
     url(r'^', include(router.urls)),
     # drf文档urls
     url('docs', include_docs_urls(title='iShop')),
-    url('api-auth/', include('rest_framework.urls')),
+    url('^api-auth/', include('rest_framework.urls')),
     # drf自带的auth-token认证
-    url('api-token-auth/', views.obtain_auth_token),
+    url('^api-token-auth/', views.obtain_auth_token),
     # #jwt的认证接口
-    # path('jwt-auth/', views.obtain_jwt_token),
-    url('login/', obtain_jwt_token),
+    url('^login/', obtain_jwt_token),
     # 文件
     path('media/<path:path>', serve, {'document_root': MEDIA_ROOT}),
     # 第三方登录

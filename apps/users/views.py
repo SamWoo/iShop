@@ -19,19 +19,19 @@ from utils.yunpian import YunPian
 User = get_user_model()
 
 # Create your views here.
-# class CustomBackend(ModelBackend):
-#     """
-#     自定义用户认证
-#     """
+class CustomBackend(ModelBackend):
+    """
+    自定义用户认证
+    """
 
-#     def authenticate(self, username=None, password=None, **kwargs):
-#         #用户名和手机都能登录
-#         try:
-#             user = User.objects.get(Q(username=username) | Q(mobile=username))
-#             if user.check_password(password=password):
-#                 return user
-#         except Exception as e:
-#             return None
+    def authenticate(self, username=None, password=None, **kwargs):
+        #用户名和手机都能登录
+        try:
+            user = User.objects.get(Q(username=username) | Q(mobile=username))
+            if user.check_password(password=password):
+                return user
+        except Exception as e:
+            return None
 
 
 class SmsCodeViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
@@ -41,10 +41,8 @@ class SmsCodeViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     """
     serializer_class = SmsSerializer
 
+    # 生成四位数字的验证码
     def generate_code(self):
-        """
-        生成四位数字的验证码
-        """
         seeds = '1234567890'
         code = ''.join([choice(seeds) for i in range(4)])
         return code
@@ -72,7 +70,7 @@ class SmsCodeViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
                 'mobile': mobile,
             },
                             status=status.HTTP_201_CREATED)
-
+    # pass
 
 class UserViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin,
                   mixins.UpdateModelMixin, viewsets.GenericViewSet):
@@ -133,3 +131,4 @@ class UserViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin,
 
     def perform_create(self, serializer):
         return serializer.save()
+    # pass
