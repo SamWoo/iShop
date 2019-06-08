@@ -25,7 +25,7 @@ import xadmin
 from goods.views import GoodsListViewSet, CategoryViewSet, BannerViewSet, HotSearchViewSet, IndexCategoryViewSet
 from users.views import SmsCodeViewSet, UserViewSet
 from user_operation.views import UserFavViewSet, UserAddressViewSet, UserLeavingMessageViewSet
-from trade.views import ShoppingCartViewSet,OrderViewSet
+from trade.views import ShoppingCartViewSet, OrderViewSet
 from iShop.settings import MEDIA_ROOT
 
 router = DefaultRouter()
@@ -52,7 +52,7 @@ router.register(r'shopcarts', ShoppingCartViewSet, base_name='shopcarts')
 # Orders
 router.register(r'orders', OrderViewSet, base_name='orders')
 # IndexGoods
-router.register(r'indexgoods',IndexCategoryViewSet,base_name='indexgoods')
+router.register(r'indexgoods', IndexCategoryViewSet, base_name='indexgoods')
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -71,5 +71,5 @@ urlpatterns = [
     # 文件
     path('media/<path:path>', serve, {'document_root': MEDIA_ROOT}),
     # 第三方登录
-    path('',include('social_django.urls',namespace='social')),
+    path('', include('social_django.urls', namespace='social')),
 ]

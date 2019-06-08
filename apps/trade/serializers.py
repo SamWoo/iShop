@@ -77,7 +77,7 @@ class ShoppingCartSerializer(serializers.Serializer):
     """
     购物车
     """
-    #获取当前登录的用户
+    # 获取当前登录的用户
     user = serializers.HiddenField(default=serializers.CurrentUserDefault)
     nums = serializers.IntegerField(required=True,
                                     label='数量',

@@ -6,7 +6,9 @@ from utils.permissions import IsOwnerOrReadOnly
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework.authentication import SessionAuthentication
 from user_operation.models import UserFav, UserAddress, UserLeavingMessage
-from user_operation.serializers import UserFavSerializer, UserFavDetailSerializer, UserAddressSerializer, UserLeavingMessageSerializer
+from user_operation.serializers import UserFavSerializer, UserFavDetailSerializer, UserAddressSerializer, \
+    UserLeavingMessageSerializer
+
 
 # Create your views here.
 
@@ -85,4 +87,3 @@ class UserLeavingMessageViewSet(mixins.ListModelMixin, mixins.CreateModelMixin,
 
     def get_queryset(self):
         return UserLeavingMessage.objects.filter(user=self.request.user)
-    

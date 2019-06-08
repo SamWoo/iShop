@@ -120,19 +120,19 @@ DATABASES = {
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME':
-        'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+            'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
         'NAME':
-        'django.contrib.auth.password_validation.MinimumLengthValidator',
+            'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
         'NAME':
-        'django.contrib.auth.password_validation.CommonPasswordValidator',
+            'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
         'NAME':
-        'django.contrib.auth.password_validation.NumericPasswordValidator',
+            'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
 
@@ -195,9 +195,9 @@ CORS_ORIGIN_ALLOW_ALL = True
 #  自定义用户认证
 AUTHENTICATION_BACKENDS = (
     'users.views.CustomBackend',
-    'social_core.backends.weibo.WeiboOAuth2',
-    'social_core.backends.qq.QQOAuth2',
-    'social_core.backends.weixin.WeixinOAuth2',
+    # 'social_core.backends.weibo.WeiboOAuth2',
+    # 'social_core.backends.qq.QQOAuth2',
+    # 'social_core.backends.weixin.WeixinOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -210,7 +210,7 @@ JWT_AUTH = {
 # 手机号码正则表达式
 REGEX_MOBILE = "^1[358]\d{9}$|^147\d{8}$|^176\d{8}$"
 
-#云片网APIKEY
+# 云片网APIKEY
 APIKEY = "xxxxx327d4be01608xxxxxxxxxx"
 
 # 缓存配置,这个缓存使用的是内存，每次重启之后就会失效
@@ -220,13 +220,13 @@ REST_FRAMEWORK_EXTENSIONS = {
 
 # Cache配置
 # CACHES = {
-    # 'default': {
-        # 'BACKEND': 'django_redis.cache.RedisCache',
-        # 'LOCATION': 'redis://127.0.0.1:8000',
-        # 'OPTIONS': {
-        #     'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-        # }
-    # }
+# 'default': {
+# 'BACKEND': 'django_redis.cache.RedisCache',
+# 'LOCATION': 'redis://127.0.0.1:8000',
+# 'OPTIONS': {
+#     'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+# }
+# }
 # }
 
 # 第三方登录，里面的值是你的开放平台对应的值
@@ -239,5 +239,5 @@ SOCIAL_AUTH_QQ_SECRET = 'xxxxxxx'
 SOCIAL_AUTH_WEIXIN_KEY = 'xxxxxxx'
 SOCIAL_AUTH_WEIXIN_SECRET = 'xxxxxxx'
 
-#登录成功后跳转到首页
+# 登录成功后跳转到首页
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/index/'

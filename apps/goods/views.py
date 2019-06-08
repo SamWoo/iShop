@@ -6,20 +6,21 @@ from rest_framework.pagination import PageNumberPagination
 # Create your views here.
 from goods.filters import GoodsFilter
 from goods.models import Goods, GoodsCategory, HotSearchWords, Banner
-from goods.serializers import GoodsSerializer, CategorySerializer, HotSearchSerializer, BannerSerializer, IndexCategorySerializer
+from goods.serializers import GoodsSerializer, CategorySerializer, HotSearchSerializer, BannerSerializer, \
+    IndexCategorySerializer
 from rest_framework_extensions.cache.mixins import CacheResponseMixin
 from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
 
 
 # 自定义分页功能
 class GoodsPagination(PageNumberPagination):
-    #默认每页显示的个数
+    # 默认每页显示的个数
     page_size = 12
-    #页码参数,与起前端一致"page"
+    # 页码参数,与起前端一致"page"
     page_query_param = 'page'
-    #可以动态改变每页显示的个数
+    # 可以动态改变每页显示的个数
     page_size_query_param = 'page_size'
-    #最多能显示多少页
+    # 最多能显示多少页
     max_page_size = 100
 
 

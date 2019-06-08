@@ -8,4 +8,5 @@ class UsersConfig(AppConfig):
 
     # 重载
     def ready(self):
-        import users.signals
+        # import users.signals
+        pass
