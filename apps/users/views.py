@@ -33,7 +33,7 @@ class CustomBackend(ModelBackend):
         # print(password)
         try:
             user = User.objects.get(Q(username=username) | Q(mobile=username))
-            print(type(user))
+            # print(type(user))
             if user.check_password(password):
                 return user
         except Exception as e:
@@ -91,6 +91,7 @@ class UserViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin,
         更新用户信息
     """
     serializer_class = UserRegisterSerializer
+    # serializer_class = UserDetailSerializer
     queryset = User.objects.all()
     # authentication_classes = (TokenAuthentication, )
 
@@ -132,7 +133,7 @@ class UserViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin,
             return UserRegisterSerializer
         return UserDetailSerializer
 
-    # 虽然继承了Retrieve可以获取用户详情，但是并不知道用户的id，所有要重写get_object方法
+    # 虽然继承了Retrieve可以获取用户详情，但是并不知道用户的id，所以要重写get_object方法
     # 重写get_object方法，就知道是哪个用户了
     def get_object(self):
         return self.request.user

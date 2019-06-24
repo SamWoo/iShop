@@ -32,16 +32,16 @@ class UserAddress(models.Model):
     用户收货地址
     """
     user = models.ForeignKey(User, verbose_name='用户', on_delete=models.CASCADE)
-    provice = models.CharField(verbose_name='省份', max_length=100, default='')
-    city = models.CharField(verbose_name='城市', max_length=100, default='')
-    district = models.CharField(verbose_name='区域', max_length=100, default='')
-    address = models.CharField(verbose_name='详细地址', max_length=100, default='')
+    provice = models.CharField(verbose_name='省份', max_length=100, default='',help_text='省份')
+    city = models.CharField(verbose_name='城市', max_length=100, default='',help_text='城市')
+    district = models.CharField(verbose_name='区域', max_length=100, default='',help_text='区域')
+    address = models.CharField(verbose_name='详细地址', max_length=100, default='',help_text='详细地址')
     signer_name = models.CharField(verbose_name='签收人',
                                    max_length=100,
-                                   default='')
+                                   default='',help_text='签收人')
     signer_mobile = models.CharField(verbose_name='电话',
                                      max_length=11,
-                                     default='')
+                                     default='',help_text='签收人电话')
     add_time = models.DateTimeField(verbose_name='添加时间', default=datetime.now)
 
     class Meta:
@@ -61,8 +61,8 @@ class UserLeavingMessage(models.Model):
     user = models.ForeignKey(User, verbose_name='用户', on_delete=models.CASCADE)
     message_type = models.IntegerField(verbose_name='留言类型',
                                        choices=MESSAGE_TYPES,
-                                       default=1)
-    subject = models.CharField(verbose_name='主题', max_length=100, default='')
+                                       default=1,help_text='留言类型')
+    subject = models.CharField(verbose_name='主题', max_length=100, default='',help_text='主题')
     message = models.TextField(verbose_name='留言内容',
                                default='',
                                help_text='留言内容')

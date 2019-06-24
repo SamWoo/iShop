@@ -15,8 +15,11 @@ class ShoppingCart(models.Model):
     user = models.ForeignKey(User, verbose_name='用户', on_delete=models.CASCADE)
     goods = models.ForeignKey(Goods,
                               verbose_name='商品',
-                              on_delete=models.CASCADE)
-    nums = models.IntegerField(verbose_name='商品数量', default=0)
+                              on_delete=models.CASCADE,
+                              help_text='商品')
+    nums = models.IntegerField(verbose_name='商品数量',
+                               default=0,
+                               help_text='商品數量')
     add_time = models.DateTimeField(verbose_name='添加时间', default=datetime.now)
 
     class Meta:
@@ -43,36 +46,56 @@ class OrderInfo(models.Model):
                                 max_length=30,
                                 unique=True,
                                 null=True,
-                                blank=True)
+                                blank=True,
+                                help_text='订单号')
     nonce_str = models.CharField(verbose_name='随机加密串',
                                  max_length=50,
                                  null=True,
-                                 blank=True)
+                                 blank=True,
+                                 help_text='随机加密串')
     trade_no = models.CharField(verbose_name='交易号',
                                 max_length=100,
                                 unique=True,
                                 null=True,
-                                blank=True)
+                                blank=True,
+                                help_text='交易号')
     pay_status = models.CharField(verbose_name='订单状态',
                                   choices=ORDER_STATUS,
                                   default='paying',
-                                  max_length=30)
+                                  max_length=30,
+                                  help_text='订单状态')
     pay_type = models.CharField(verbose_name='支付类型',
                                 choices=PAY_TYPE,
                                 default='alipay',
-                                max_length=10)
-    post_script = models.TextField(verbose_name='订单留言', max_length=200)
-    order_mount = models.FloatField(verbose_name='订单金额', default=0.0)
-    pay_time = models.DateTimeField(verbose_name='支付时间', null=True, blank=True)
+                                max_length=10,
+                                help_text='支付类型')
+    post_script = models.TextField(verbose_name='订单留言',
+                                   max_length=200,
+                                   help_text='订单留言')
+    order_mount = models.FloatField(verbose_name='订单金额',
+                                    default=0.0,
+                                    help_text='訂單金額')
+    pay_time = models.DateTimeField(verbose_name='支付时间',
+                                    null=True,
+                                    blank=True,
+                                    help_text='支付時間')
 
     #  收货信息
-    address = models.CharField(verbose_name='收货地址', max_length=100, default='')
+    address = models.CharField(verbose_name='收货地址',
+                               max_length=100,
+                               default='',
+                               help_text='收货地址')
     signer_name = models.CharField(verbose_name='签收人',
                                    max_length=20,
-                                   default='')
-    signer_mobile = models.CharField(verbose_name='联系电话', max_length=11)
+                                   default='',
+                                   help_text='签收人')
+    signer_mobile = models.CharField(verbose_name='联系电话',
+                                     max_length=11,
+                                     help_text='联系电话')
 
-    add_time = models.DateTimeField(verbose_name='添加时间', default=datetime.now)
+    add_time = models.DateTimeField(verbose_name='添加时间',
+                                    default=datetime.now,
+                                    help_text='添加時間')
 
     class Meta:
         verbose_name = '订单信息'

@@ -13,7 +13,7 @@ class SmsSerializer(serializers.Serializer):
     """
     验证手机号码
     """
-    mobile = serializers.CharField(max_length=11)
+    mobile = serializers.CharField(max_length=11, help_text='手機號')
 
     # 函数名必须：validate + 验证字段名
     def validate_mobile(self, mobile):
@@ -75,6 +75,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     def validate_code(self, code):
         # 用户注册，已post方式提交注册信息，post的数据都保存在initial_data里面
         # username就是用户注册的手机号，验证码按添加时间倒序排序，为了后面验证过期，错误等
+        print(self.initial_data)
         verify_records = VerifyCode.objects.filter(
             mobile=self.initial_data['username']).order_by('-add_time')
         # print(verify_records)

@@ -20,7 +20,9 @@ class GoodsFilter(FilterSet):
                              help_text='最高价格',
                              lookup_expr='lte')
     # 商品一级分类，传入一级分类的ID
-    top_category = NumberFilter(field_name='category', method='top_category_filter')
+    top_category = NumberFilter(field_name='category',
+                                method='top_category_filter',
+                                help_text='一級分類')
 
     def top_category_filter(self, queryset, name, value):
         # 不管当前点击的是一级分类二级分类还是三级分类，都能找到

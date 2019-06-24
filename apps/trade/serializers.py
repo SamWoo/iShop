@@ -85,11 +85,13 @@ class ShoppingCartSerializer(serializers.Serializer):
                                     error_messages={
                                         "min_value": "商品数量不能小于一",
                                         "required": "请选择购买数量",
-                                    })
+                                    },
+                                    help_text='商品數量')
     # 这里是继承Serializer，必须指定queryset对象，如果继承ModelSerializer则不需要指定
     # goods是一个外键，可以通过这方法获取goods object中所有的值
     goods = serializers.PrimaryKeyRelatedField(required=True,
-                                               queryset=Goods.objects.all())
+                                               queryset=Goods.objects.all(),
+                                               help_text='商品')
 
     # 继承的Serializer没有save功能，必须写一个create方法
     def create(self, validated_data):

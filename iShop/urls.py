@@ -62,7 +62,7 @@ urlpatterns = [
     # Router路由
     url(r'^', include(router.urls)),
     # drf文档urls
-    url('docs', include_docs_urls(title='iShop')),
+    url(r'docs/', include_docs_urls(title='iShop')),
     url('^api-auth/', include('rest_framework.urls')),
     # drf自带的auth-token认证
     url('^api-token-auth/', views.obtain_auth_token),

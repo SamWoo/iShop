@@ -105,9 +105,13 @@ class Goods(models.Model):
                                           blank=True,
                                           verbose_name='封面图')
     # 首页中展示新品
-    is_new = models.BooleanField(verbose_name='是否为新品', default=False)
+    is_new = models.BooleanField(verbose_name='是否为新品',
+                                 default=False,
+                                 help_text='是否新品')
     # 商品详情页的热卖商品
-    is_hot = models.BooleanField(verbose_name='是否热销', default=False)
+    is_hot = models.BooleanField(verbose_name='是否热销',
+                                 default=False,
+                                 help_text='是否熱銷')
     click_num = models.IntegerField(verbose_name='点击数', default=0)
     add_time = models.DateTimeField(verbose_name='添加时间', default=datetime.now)
 
@@ -173,7 +177,7 @@ class IndexAd(models.Model):
                               related_name='goods')
 
     class Meta:
-        verbose_name = '首页广告'
+        verbose_name = '分类广告'
         verbose_name_plural = verbose_name
 
     def __str__(self):
